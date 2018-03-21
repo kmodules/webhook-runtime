@@ -24,7 +24,7 @@ func New(t metav1.TypeMeta, o metav1.ObjectMeta, tpl core.PodTemplateSpec) *Work
 	}
 }
 
-func newWithObject(t metav1.TypeMeta, o metav1.ObjectMeta, sel *metav1.LabelSelector,  tpl core.PodTemplateSpec, obj runtime.Object) *Workload {
+func newWithObject(t metav1.TypeMeta, o metav1.ObjectMeta, sel *metav1.LabelSelector, tpl core.PodTemplateSpec, obj runtime.Object) *Workload {
 	return &Workload{
 		TypeMeta:   t,
 		ObjectMeta: o,
@@ -32,7 +32,7 @@ func newWithObject(t metav1.TypeMeta, o metav1.ObjectMeta, sel *metav1.LabelSele
 			Selector: sel,
 			Template: tpl,
 		},
-		Object:     obj,
+		Object: obj,
 	}
 }
 
@@ -46,7 +46,7 @@ func ConvertToWorkload(obj runtime.Object) (*Workload, error) {
 		if t.Spec.Template == nil {
 			t.Spec.Template = &core.PodTemplateSpec{}
 		}
-		return newWithObject(t.TypeMeta, t.ObjectMeta,  &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
 		// Deployment
 	case *extensions.Deployment:
 		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil

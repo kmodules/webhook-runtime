@@ -5,8 +5,8 @@ import (
 	"sync"
 
 	jp "github.com/appscode/jsonpatch"
-	"github.com/appscode/kutil/admission"
-	"github.com/appscode/kutil/runtime/serializer/versioning"
+	"github.com/appscode/kubernetes-webhook-util/admission"
+	"github.com/appscode/kubernetes-webhook-util/runtime/serializer/versioning"
 	"k8s.io/api/admission/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
