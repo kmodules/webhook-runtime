@@ -3,6 +3,7 @@ package v1
 import (
 	"fmt"
 
+	ocapps "github.com/openshift/api/apps/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	appsv1beta1 "k8s.io/api/apps/v1beta1"
 	appsv1beta2 "k8s.io/api/apps/v1beta2"
@@ -83,6 +84,12 @@ func ConvertToWorkload(obj runtime.Object) (*Workload, error) {
 		// CronJob
 	case *batchv1beta1.CronJob:
 		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.JobTemplate.Spec.Selector, t.Spec.JobTemplate.Spec.Template, obj), nil
+		// DeploymentConfig
+	case *ocapps.DeploymentConfig:
+		if t.Spec.Template == nil {
+			t.Spec.Template = &core.PodTemplateSpec{}
+		}
+		return newWithObject(t.TypeMeta, t.ObjectMeta, &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
 	default:
 		return nil, fmt.Errorf("the object is not a pod or does not have a pod template")
 	}
@@ -148,6 +155,10 @@ func ApplyWorkload(obj runtime.Object, w *Workload) error {
 	case *batchv1beta1.CronJob:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.JobTemplate.Spec.Template = w.Spec.Template
+		// DeploymentConfig
+	case *ocapps.DeploymentConfig:
+		t.ObjectMeta = w.ObjectMeta
+		t.Spec.Template = &w.Spec.Template
 	default:
 		return fmt.Errorf("the object is not a pod or does not have a pod template")
 	}

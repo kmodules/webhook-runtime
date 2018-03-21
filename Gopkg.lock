@@ -37,16 +37,6 @@
   revision = "3e75a56b8967932466984d4432401e1c1a7ff61e"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/appscode/kutil"
-  packages = [
-    "admission",
-    "runtime/serializer/versioning",
-    "workload/v1"
-  ]
-  revision = "436b54978ae275a61a06baa3f0a119864691cf12"
-
-[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
@@ -194,6 +184,12 @@
   packages = ["."]
   revision = "279bed98673dd5bef374d3b6e4b09e2af76183bf"
   version = "v1.0.0-rc1"
+
+[[projects]]
+  branch = "release-3.9"
+  name = "github.com/openshift/api"
+  packages = ["apps/v1"]
+  revision = "0d921e363e951d89f583292c60d013c318df64dc"
 
 [[projects]]
   name = "github.com/pborman/uuid"
@@ -448,6 +444,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "73f3c618546e4f8bdbe31763d1bc5777bb7c2f966eb3c14c4d5a822e4497d7e8"
+  inputs-digest = "544efab83f21421be49bb3562ccfcbc1db51412476e56fbfdd835dc012018e82"
   solver-name = "gps-cdcl"
   solver-version = 1
