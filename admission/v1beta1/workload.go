@@ -5,9 +5,9 @@ import (
 	"sync"
 
 	jp "github.com/appscode/jsonpatch"
-	"github.com/appscode/kutil/admission"
-	"github.com/appscode/kutil/runtime/serializer/versioning"
-	workload "github.com/appscode/kutil/workload/v1"
+	"github.com/appscode/kubernetes-webhook-util/admission"
+	"github.com/appscode/kubernetes-webhook-util/runtime/serializer/versioning"
+	workload "github.com/appscode/kubernetes-webhook-util/workload/v1"
 	"k8s.io/api/admission/v1beta1"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
