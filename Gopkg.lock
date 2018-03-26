@@ -303,7 +303,13 @@
     "batch/v1beta1",
     "batch/v2alpha1",
     "core/v1",
-    "extensions/v1beta1"
+    "extensions/v1beta1",
+    "rbac/v1",
+    "rbac/v1alpha1",
+    "rbac/v1beta1",
+    "storage/v1",
+    "storage/v1alpha1",
+    "storage/v1beta1"
   ]
   revision = "af4bc157c3a209798fc897f6d4aaaaeb6c2e0d6a"
   version = "kubernetes-1.9.0"
@@ -434,6 +440,16 @@
     "pkg/apis/extensions/install",
     "pkg/apis/extensions/v1beta1",
     "pkg/apis/networking",
+    "pkg/apis/rbac",
+    "pkg/apis/rbac/install",
+    "pkg/apis/rbac/v1",
+    "pkg/apis/rbac/v1alpha1",
+    "pkg/apis/rbac/v1beta1",
+    "pkg/apis/storage",
+    "pkg/apis/storage/install",
+    "pkg/apis/storage/v1",
+    "pkg/apis/storage/v1alpha1",
+    "pkg/apis/storage/v1beta1",
     "pkg/features",
     "pkg/util/parsers",
     "pkg/util/pointer"
@@ -444,6 +460,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "544efab83f21421be49bb3562ccfcbc1db51412476e56fbfdd835dc012018e82"
+  inputs-digest = "073232d153f9f9612b1a03f921835a505488d4b5bab2d20149402b7bb5e656e0"
   solver-name = "gps-cdcl"
   solver-version = 1
