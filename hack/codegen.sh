@@ -16,7 +16,7 @@ docker run --rm -ti -u $(id -u):$(id -g) \
     appscode/gengo:release-1.9 deepcopy-gen \
     --v 1 --logtostderr \
     --go-header-file "hack/gengo/boilerplate.go.txt" \
-    --input-dirs "$PACKAGE_NAME/workload/v1" \
+    --input-dirs "$PACKAGE_NAME/apis/workload/v1" \
     --output-file-base zz_generated.deepcopy
 
 popd

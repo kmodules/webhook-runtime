@@ -240,6 +240,16 @@
   revision = "0d921e363e951d89f583292c60d013c318df64dc"
 
 [[projects]]
+  branch = "release-3.9"
+  name = "github.com/openshift/client-go"
+  packages = [
+    "apps/clientset/versioned",
+    "apps/clientset/versioned/scheme",
+    "apps/clientset/versioned/typed/apps/v1"
+  ]
+  revision = "42d4abb856ce41c204a6e24342f12be5b5cd9ab8"
+
+[[projects]]
   name = "github.com/pborman/uuid"
   packages = ["."]
   revision = "e790cca94e6cc75c7064b1332e63811d4aae1a53"
@@ -580,6 +590,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "19afffe60d5ebbeaae3de2320d884cea209f2ac4fcab22c2ffcb42959e28fcd2"
+  inputs-digest = "e521748f7be5de9ced9573d2a42b27bed0b42e62b8b8e641bc72f3f9f19f15bc"
   solver-name = "gps-cdcl"
   solver-version = 1
