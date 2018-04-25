@@ -19,20 +19,6 @@ import (
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
 )
 
-type WorkloadKind string
-
-const (
-	KindPod                   WorkloadKind = "Pod"
-	KindDeployment            WorkloadKind = "Deployment"
-	KindReplicaSet            WorkloadKind = "ReplicaSet"
-	KindReplicationController WorkloadKind = "ReplicationController"
-	KindStatefulSet           WorkloadKind = "StatefulSet"
-	KindDaemonSet             WorkloadKind = "DaemonSet"
-	KindJob                   WorkloadKind = "Job"
-	KindCronJob               WorkloadKind = "CronJob"
-	KindDeploymentConfig      WorkloadKind = "DeploymentConfig"
-)
-
 func NewWorkload(t metav1.TypeMeta, o metav1.ObjectMeta, tpl core.PodTemplateSpec) *v1.Workload {
 	return &v1.Workload{
 		TypeMeta:   t,
@@ -57,25 +43,25 @@ func NewObjectForGVK(gvk schema.GroupVersionKind, name, ns string) (runtime.Obje
 	return obj, nil
 }
 
-func NewObjectForKind(kind WorkloadKind, name, ns string) (runtime.Object, error) {
+func NewObjectForKind(kind v1.WorkloadKind, name, ns string) (runtime.Object, error) {
 	switch kind {
-	case KindPod:
+	case v1.KindPod:
 		return &core.Pod{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindReplicationController:
+	case v1.KindReplicationController:
 		return &core.ReplicationController{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindDeployment:
+	case v1.KindDeployment:
 		return &appsv1beta1.Deployment{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindDaemonSet:
+	case v1.KindDaemonSet:
 		return &extensions.DaemonSet{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindReplicaSet:
+	case v1.KindReplicaSet:
 		return &extensions.ReplicaSet{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindStatefulSet:
+	case v1.KindStatefulSet:
 		return &appsv1beta1.StatefulSet{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindJob:
+	case v1.KindJob:
 		return &batchv1.Job{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindCronJob:
+	case v1.KindCronJob:
 		return &batchv1beta1.CronJob{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
-	case KindDeploymentConfig:
+	case v1.KindDeploymentConfig:
 		return &ocapps.DeploymentConfig{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil
 	default:
 		return nil, fmt.Errorf("unknown kind %s", kind)
