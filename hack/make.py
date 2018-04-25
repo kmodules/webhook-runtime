@@ -61,21 +61,22 @@ def version():
 
 
 def fmt():
-    libbuild.ungroup_go_imports('admission', 'registry', 'runtime', 'workload')
-    die(call('goimports -w admission registry runtime workload'))
-    call('gofmt -s -w admission registry runtime workload')
+    libbuild.ungroup_go_imports('admission', 'apis', 'client', 'registry', 'runtime')
+    die(call('goimports -w admission apis client registry runtime'))
+    call('gofmt -s -w admission apis client registry runtime')
 
 
 def vet():
-    call('go vet ./admission/... ./registry/... ./runtime/... ./workload/...')
+    call('go vet ./admission/... ./apis/... ./client/... ./registry/... ./runtime/...')
 
 
 def lint():
     call('golint *.go')
     call('golint ./admission/...')
+    call('golint ./apis/...')
+    call('golint ./client/...')
     call('golint ./registry/...')
     call('golint ./runtime/...')
-    call('golint ./workload/...')
 
 
 def gen():
