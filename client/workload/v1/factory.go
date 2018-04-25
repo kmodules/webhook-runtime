@@ -82,11 +82,12 @@ func NewObjectForKind(kind WorkloadKind, name, ns string) (runtime.Object, error
 	}
 }
 
-func newWithObject(t metav1.TypeMeta, o metav1.ObjectMeta, sel *metav1.LabelSelector, tpl core.PodTemplateSpec, obj runtime.Object) *v1.Workload {
+func newWithObject(t metav1.TypeMeta, o metav1.ObjectMeta, replicas *int32, sel *metav1.LabelSelector, tpl core.PodTemplateSpec, obj runtime.Object) *v1.Workload {
 	return &v1.Workload{
 		TypeMeta:   t,
 		ObjectMeta: o,
 		Spec: v1.WorkloadSpec{
+			Replicas: replicas,
 			Selector: sel,
 			Template: tpl,
 		},
@@ -98,55 +99,59 @@ func newWithObject(t metav1.TypeMeta, o metav1.ObjectMeta, sel *metav1.LabelSele
 func ConvertToWorkload(obj runtime.Object) (*v1.Workload, error) {
 	switch t := obj.(type) {
 	case *core.Pod:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, nil, core.PodTemplateSpec{ObjectMeta: t.ObjectMeta, Spec: t.Spec}, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, nil, nil, core.PodTemplateSpec{ObjectMeta: t.ObjectMeta, Spec: t.Spec}, obj), nil
 		// ReplicationController
 	case *core.ReplicationController:
 		if t.Spec.Template == nil {
 			t.Spec.Template = &core.PodTemplateSpec{}
 		}
-		return newWithObject(t.TypeMeta, t.ObjectMeta, &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
 		// Deployment
 	case *extensions.Deployment:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1beta1.Deployment:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1beta2.Deployment:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1.Deployment:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 		// DaemonSet
 	case *extensions.DaemonSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, nil, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1beta2.DaemonSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, nil, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1.DaemonSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, nil, t.Spec.Selector, t.Spec.Template, obj), nil
 		// ReplicaSet
 	case *extensions.ReplicaSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1beta2.ReplicaSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1.ReplicaSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 		// StatefulSet
 	case *appsv1beta1.StatefulSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1beta2.StatefulSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 	case *appsv1.StatefulSet:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Replicas, t.Spec.Selector, t.Spec.Template, obj), nil
 		// Job
 	case *batchv1.Job:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.Selector, t.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, nil, t.Spec.Selector, t.Spec.Template, obj), nil
 		// CronJob
 	case *batchv1beta1.CronJob:
-		return newWithObject(t.TypeMeta, t.ObjectMeta, t.Spec.JobTemplate.Spec.Selector, t.Spec.JobTemplate.Spec.Template, obj), nil
+		return newWithObject(t.TypeMeta, t.ObjectMeta, nil, t.Spec.JobTemplate.Spec.Selector, t.Spec.JobTemplate.Spec.Template, obj), nil
 		// DeploymentConfig
 	case *ocapps.DeploymentConfig:
 		if t.Spec.Template == nil {
 			t.Spec.Template = &core.PodTemplateSpec{}
 		}
-		return newWithObject(t.TypeMeta, t.ObjectMeta, &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
+		var replicas *int32
+		if t.Spec.Replicas > 0 {
+			replicas = &t.Spec.Replicas
+		}
+		return newWithObject(t.TypeMeta, t.ObjectMeta, replicas, &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
 	default:
 		return nil, fmt.Errorf("the object is not a pod or does not have a pod template")
 	}
@@ -161,19 +166,34 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 	case *core.ReplicationController:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = &w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 		// Deployment
 	case *extensions.Deployment:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 	case *appsv1beta1.Deployment:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 	case *appsv1beta2.Deployment:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 	case *appsv1.Deployment:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 		// DaemonSet
 	case *extensions.DaemonSet:
 		t.ObjectMeta = w.ObjectMeta
@@ -188,22 +208,40 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 	case *extensions.ReplicaSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 	case *appsv1beta2.ReplicaSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 	case *appsv1.ReplicaSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 		// StatefulSet
 	case *appsv1beta1.StatefulSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 	case *appsv1beta2.StatefulSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 	case *appsv1.StatefulSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = w.Spec.Replicas
+		}
 		// Job
 	case *batchv1.Job:
 		t.ObjectMeta = w.ObjectMeta
@@ -216,6 +254,9 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 	case *ocapps.DeploymentConfig:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = &w.Spec.Template
+		if w.Spec.Replicas != nil {
+			t.Spec.Replicas = *w.Spec.Replicas
+		}
 	default:
 		return fmt.Errorf("the object is not a pod or does not have a pod template")
 	}
