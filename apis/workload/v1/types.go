@@ -6,6 +6,20 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
+type WorkloadKind string
+
+const (
+	KindPod                   WorkloadKind = "Pod"
+	KindDeployment            WorkloadKind = "Deployment"
+	KindReplicaSet            WorkloadKind = "ReplicaSet"
+	KindReplicationController WorkloadKind = "ReplicationController"
+	KindStatefulSet           WorkloadKind = "StatefulSet"
+	KindDaemonSet             WorkloadKind = "DaemonSet"
+	KindJob                   WorkloadKind = "Job"
+	KindCronJob               WorkloadKind = "CronJob"
+	KindDeploymentConfig      WorkloadKind = "DeploymentConfig"
+)
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type Workload struct {
