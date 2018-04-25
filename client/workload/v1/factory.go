@@ -30,8 +30,7 @@ const (
 	KindDaemonSet             WorkloadKind = "DaemonSet"
 	KindJob                   WorkloadKind = "Job"
 	KindCronJob               WorkloadKind = "CronJob"
-	// openshift
-	KindDeploymentConfig = "DeploymentConfig"
+	KindDeploymentConfig      WorkloadKind = "DeploymentConfig"
 )
 
 func NewWorkload(t metav1.TypeMeta, o metav1.ObjectMeta, tpl core.PodTemplateSpec) *v1.Workload {
