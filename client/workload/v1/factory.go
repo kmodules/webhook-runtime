@@ -138,6 +138,8 @@ func ConvertToWorkload(obj runtime.Object) (*v1.Workload, error) {
 			replicas = &t.Spec.Replicas
 		}
 		return newWithObject(t.TypeMeta, t.ObjectMeta, replicas, &metav1.LabelSelector{MatchLabels: t.Spec.Selector}, *t.Spec.Template, obj), nil
+	case *v1.Workload:
+		return t, nil
 	default:
 		return nil, fmt.Errorf("the object is not a pod or does not have a pod template")
 	}
