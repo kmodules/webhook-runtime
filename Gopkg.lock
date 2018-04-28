@@ -589,6 +589,7 @@
     "third_party/forked/golang/template",
     "tools/clientcmd/api",
     "tools/metrics",
+    "tools/pager",
     "tools/reference",
     "transport",
     "util/cert",
@@ -650,6 +651,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e8066df413454a293ccea7ea12b3d5031488ca38d617b6fa69da0451c4713ed4"
+  inputs-digest = "8aad1f2f1630648d1bc7b53dc21df8e50996a0d87a1b2bc8d61b5b02eea6e87e"
   solver-name = "gps-cdcl"
   solver-version = 1
