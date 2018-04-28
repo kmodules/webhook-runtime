@@ -43,7 +43,7 @@ func NewObjectForGVK(gvk schema.GroupVersionKind, name, ns string) (runtime.Obje
 	return obj, nil
 }
 
-func NewObjectForKind(kind v1.WorkloadKind, name, ns string) (runtime.Object, error) {
+func NewObjectForKind(kind string, name, ns string) (runtime.Object, error) {
 	switch kind {
 	case v1.KindPod:
 		return &core.Pod{ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns}}, nil

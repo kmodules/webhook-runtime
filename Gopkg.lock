@@ -41,6 +41,7 @@
   name = "github.com/appscode/kutil"
   packages = [
     ".",
+    "discovery",
     "meta"
   ]
   revision = "9618833b480d6b78f02121dc4d231a933e30a8cc"
@@ -200,6 +201,13 @@
   revision = "9cad4c3443a7200dd6400aef47183728de563a38"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/go-version"
+  packages = ["."]
+  revision = "53932f80ddea12bea96be074f9fb2dc545806aba"
+  source = "https://github.com/appscode/go-version.git"
+
+[[projects]]
   name = "github.com/json-iterator/go"
   packages = ["."]
   revision = "ca39e5af3ece67bbcda3d0f4f56a8e24d9f2dad4"
@@ -326,6 +334,12 @@
   packages = ["."]
   revision = "5f041e8faa004a95c88a202771f4cc3e991971e6"
   version = "v2.0.1"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
 
 [[projects]]
   name = "github.com/sergi/go-diff"
@@ -650,6 +664,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e8066df413454a293ccea7ea12b3d5031488ca38d617b6fa69da0451c4713ed4"
+  inputs-digest = "aefd1bc0da0750f20001edfb87ae8fbccd30c6cdb7f45ad716ae9d4facd7aa39"
   solver-name = "gps-cdcl"
   solver-version = 1
