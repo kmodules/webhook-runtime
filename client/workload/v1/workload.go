@@ -293,123 +293,146 @@ func (c *workloads) List(opts metav1.ListOptions) (*v1.WorkloadList, error) {
 	}
 	list := v1.WorkloadList{Items: make([]v1.Workload, 0)}
 
-	{
-		objects, err := c.kc.AppsV1().Deployments(c.ns).List(options)
-		if err != nil {
-			return nil, err
-		}
-		err = meta.EachListItem(objects, func(obj runtime.Object) error {
-			w, err := ConvertToWorkload(obj)
+	if c.kc != nil {
+		{
+			objects, err := c.kc.AppsV1().Deployments(c.ns).List(options)
 			if err != nil {
-				return err
+				return nil, err
 			}
-			list.Items = append(list.Items, *w)
-			return nil
-		})
-		if err != nil {
-			return nil, err
+			err = meta.EachListItem(objects, func(obj runtime.Object) error {
+				w, err := ConvertToWorkload(obj)
+				if err != nil {
+					return err
+				}
+				list.Items = append(list.Items, *w)
+				return nil
+			})
+			if err != nil {
+				return nil, err
+			}
+		}
+		{
+			objects, err := c.kc.AppsV1().ReplicaSets(c.ns).List(options)
+			if err != nil {
+				return nil, err
+			}
+			err = meta.EachListItem(objects, func(obj runtime.Object) error {
+				w, err := ConvertToWorkload(obj)
+				if err != nil {
+					return err
+				}
+				list.Items = append(list.Items, *w)
+				return nil
+			})
+			if err != nil {
+				return nil, err
+			}
+		}
+		{
+			if c.kc != nil {
+				objects, err := c.kc.AppsV1().StatefulSets(c.ns).List(options)
+				if err != nil {
+					return nil, err
+				}
+				err = meta.EachListItem(objects, func(obj runtime.Object) error {
+					w, err := ConvertToWorkload(obj)
+					if err != nil {
+						return err
+					}
+					list.Items = append(list.Items, *w)
+					return nil
+				})
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
+		{
+			objects, err := c.kc.AppsV1().DaemonSets(c.ns).List(options)
+			if err != nil {
+				return nil, err
+			}
+			err = meta.EachListItem(objects, func(obj runtime.Object) error {
+				w, err := ConvertToWorkload(obj)
+				if err != nil {
+					return err
+				}
+				list.Items = append(list.Items, *w)
+				return nil
+			})
+			if err != nil {
+				return nil, err
+			}
+		}
+		{
+			objects, err := c.kc.CoreV1().ReplicationControllers(c.ns).List(options)
+			if err != nil {
+				return nil, err
+			}
+			err = meta.EachListItem(objects, func(obj runtime.Object) error {
+				w, err := ConvertToWorkload(obj)
+				if err != nil {
+					return err
+				}
+				list.Items = append(list.Items, *w)
+				return nil
+			})
+			if err != nil {
+				return nil, err
+			}
+		}
+		{
+			objects, err := c.kc.BatchV1().Jobs(c.ns).List(options)
+			if err != nil {
+				return nil, err
+			}
+			err = meta.EachListItem(objects, func(obj runtime.Object) error {
+				w, err := ConvertToWorkload(obj)
+				if err != nil {
+					return err
+				}
+				list.Items = append(list.Items, *w)
+				return nil
+			})
+			if err != nil {
+				return nil, err
+			}
+		}
+		{
+			objects, err := c.kc.BatchV1beta1().CronJobs(c.ns).List(options)
+			if err != nil {
+				return nil, err
+			}
+			err = meta.EachListItem(objects, func(obj runtime.Object) error {
+				w, err := ConvertToWorkload(obj)
+				if err != nil {
+					return err
+				}
+				list.Items = append(list.Items, *w)
+				return nil
+			})
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 	{
-		objects, err := c.kc.AppsV1().ReplicaSets(c.ns).List(options)
-		if err != nil {
-			return nil, err
-		}
-		err = meta.EachListItem(objects, func(obj runtime.Object) error {
-			w, err := ConvertToWorkload(obj)
+		if c.oc != nil {
+			objects, err := c.oc.AppsV1().DeploymentConfigs(c.ns).List(options)
 			if err != nil {
-				return err
+				return nil, err
 			}
-			list.Items = append(list.Items, *w)
-			return nil
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-	{
-		objects, err := c.kc.AppsV1().StatefulSets(c.ns).List(options)
-		if err != nil {
-			return nil, err
-		}
-		err = meta.EachListItem(objects, func(obj runtime.Object) error {
-			w, err := ConvertToWorkload(obj)
+			err = meta.EachListItem(objects, func(obj runtime.Object) error {
+				w, err := ConvertToWorkload(obj)
+				if err != nil {
+					return err
+				}
+				list.Items = append(list.Items, *w)
+				return nil
+			})
 			if err != nil {
-				return err
+				return nil, err
 			}
-			list.Items = append(list.Items, *w)
-			return nil
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-	{
-		objects, err := c.kc.AppsV1().DaemonSets(c.ns).List(options)
-		if err != nil {
-			return nil, err
-		}
-		err = meta.EachListItem(objects, func(obj runtime.Object) error {
-			w, err := ConvertToWorkload(obj)
-			if err != nil {
-				return err
-			}
-			list.Items = append(list.Items, *w)
-			return nil
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-	{
-		objects, err := c.kc.CoreV1().ReplicationControllers(c.ns).List(options)
-		if err != nil {
-			return nil, err
-		}
-		err = meta.EachListItem(objects, func(obj runtime.Object) error {
-			w, err := ConvertToWorkload(obj)
-			if err != nil {
-				return err
-			}
-			list.Items = append(list.Items, *w)
-			return nil
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-	{
-		objects, err := c.kc.BatchV1().Jobs(c.ns).List(options)
-		if err != nil {
-			return nil, err
-		}
-		err = meta.EachListItem(objects, func(obj runtime.Object) error {
-			w, err := ConvertToWorkload(obj)
-			if err != nil {
-				return err
-			}
-			list.Items = append(list.Items, *w)
-			return nil
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-	{
-		objects, err := c.kc.BatchV1beta1().CronJobs(c.ns).List(options)
-		if err != nil {
-			return nil, err
-		}
-		err = meta.EachListItem(objects, func(obj runtime.Object) error {
-			w, err := ConvertToWorkload(obj)
-			if err != nil {
-				return err
-			}
-			list.Items = append(list.Items, *w)
-			return nil
-		})
-		if err != nil {
-			return nil, err
 		}
 	}
 
