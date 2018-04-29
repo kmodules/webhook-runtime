@@ -331,7 +331,7 @@ func (c *workloads) List(opts metav1.ListOptions) (*v1.WorkloadList, error) {
 
 	if c.kc != nil {
 		{
-			objects, err := c.kc.AppsV1().Deployments(c.ns).List(options)
+			objects, err := c.kc.AppsV1beta1().Deployments(c.ns).List(options)
 			if err != nil {
 				return nil, err
 			}
@@ -348,7 +348,7 @@ func (c *workloads) List(opts metav1.ListOptions) (*v1.WorkloadList, error) {
 			}
 		}
 		{
-			objects, err := c.kc.AppsV1().ReplicaSets(c.ns).List(options)
+			objects, err := c.kc.ExtensionsV1beta1().ReplicaSets(c.ns).List(options)
 			if err != nil {
 				return nil, err
 			}
@@ -366,7 +366,7 @@ func (c *workloads) List(opts metav1.ListOptions) (*v1.WorkloadList, error) {
 		}
 		{
 			if c.kc != nil {
-				objects, err := c.kc.AppsV1().StatefulSets(c.ns).List(options)
+				objects, err := c.kc.AppsV1beta1().StatefulSets(c.ns).List(options)
 				if err != nil {
 					return nil, err
 				}
@@ -384,7 +384,7 @@ func (c *workloads) List(opts metav1.ListOptions) (*v1.WorkloadList, error) {
 			}
 		}
 		{
-			objects, err := c.kc.AppsV1().DaemonSets(c.ns).List(options)
+			objects, err := c.kc.ExtensionsV1beta1().DaemonSets(c.ns).List(options)
 			if err != nil {
 				return nil, err
 			}
