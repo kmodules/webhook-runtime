@@ -35,35 +35,35 @@
 
 [[constraint]]
   name = "k8s.io/api"
-  version = "kubernetes-1.9.0"
+  version = "kubernetes-1.10.0"
 
 [[constraint]]
   name = "k8s.io/apimachinery"
-  version = "kubernetes-1.9.0"
+  version = "kubernetes-1.10.0"
 
 [[constraint]]
   name = "k8s.io/apiserver"
-  version = "kubernetes-1.9.0"
+  version = "kubernetes-1.10.0"
 
 [[constraint]]
   name = "k8s.io/client-go"
-  version = "6.0.0"
+  version = "7.0.0"
 
 [[constraint]]
   name = "k8s.io/kubernetes"
-  version = "=v1.9.0"
+  version = "=v1.10.0"
 
 [[override]]
-  branch = "release-3.9"
   name = "github.com/openshift/api"
+  revision = "09a4e3d50f1aae6613b1b86941ffb8bded21e674"
 
 [[override]]
-  branch = "release-3.9"
   name = "github.com/openshift/client-go"
+  revision = "b3f4c8b4682c151defdd33ce75acfbf5fb30bccc"
 
 [[override]]
   name = "github.com/openshift/origin"
-  version = "=v3.9.0"
+  revision = "93f12e580ece30e0055f030dcd6d239116ff5cb4"
 
 [[override]]
   branch = "release-branch.go1.9"
