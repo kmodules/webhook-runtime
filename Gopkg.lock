@@ -250,23 +250,7 @@
 [[projects]]
   branch = "release-3.9"
   name = "github.com/openshift/api"
-  packages = [
-    "apps/v1",
-    "authorization/v1",
-    "build/v1",
-    "image/docker10",
-    "image/dockerpre012",
-    "image/v1",
-    "network/v1",
-    "oauth/v1",
-    "pkg/serialization",
-    "project/v1",
-    "quota/v1",
-    "route/v1",
-    "security/v1",
-    "template/v1",
-    "user/v1"
-  ]
+  packages = ["apps/v1"]
   revision = "0d921e363e951d89f583292c60d013c318df64dc"
 
 [[projects]]
@@ -282,37 +266,11 @@
 [[projects]]
   name = "github.com/openshift/origin"
   packages = [
-    "pkg/api/apihelpers",
-    "pkg/api/legacy",
     "pkg/apps/apis/apps",
-    "pkg/apps/apis/apps/install",
     "pkg/apps/apis/apps/v1",
-    "pkg/authorization/apis/authorization",
-    "pkg/authorization/apis/authorization/internal/serviceaccount",
-    "pkg/authorization/apis/authorization/v1",
-    "pkg/build/apis/build",
-    "pkg/build/apis/build/v1",
     "pkg/image/apis/image",
     "pkg/image/apis/image/internal/digest",
-    "pkg/image/apis/image/internal/reference",
-    "pkg/image/apis/image/v1",
-    "pkg/network/apis/network",
-    "pkg/network/apis/network/v1",
-    "pkg/oauth/apis/oauth",
-    "pkg/oauth/apis/oauth/v1",
-    "pkg/project/apis/project",
-    "pkg/project/apis/project/v1",
-    "pkg/quota/apis/quota",
-    "pkg/quota/apis/quota/v1",
-    "pkg/route/apis/route",
-    "pkg/route/apis/route/v1",
-    "pkg/security/apis/security",
-    "pkg/security/apis/security/v1",
-    "pkg/security/securitycontextconstraints/util",
-    "pkg/template/apis/template",
-    "pkg/template/apis/template/v1",
-    "pkg/user/apis/user",
-    "pkg/user/apis/user/v1"
+    "pkg/image/apis/image/internal/reference"
   ]
   revision = "191fece9305a76f262baacc9de72c2c8cb4d5601"
   version = "v3.9.0"
@@ -664,6 +622,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "aefd1bc0da0750f20001edfb87ae8fbccd30c6cdb7f45ad716ae9d4facd7aa39"
+  inputs-digest = "5c100cf8453bbfd30520ddc7ffcf52a28f8352ac1dafb5748252a1afa4a2424c"
   solver-name = "gps-cdcl"
   solver-version = 1
