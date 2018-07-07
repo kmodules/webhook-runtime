@@ -18,6 +18,7 @@ type REST struct {
 }
 
 var _ rest.Creater = &REST{}
+var _ rest.Scoper = &REST{}
 var _ rest.GroupVersionKindProvider = &REST{}
 
 func NewREST(hookFn AdmissionHookFunc) *REST {
@@ -32,6 +33,10 @@ func (r *REST) New() runtime.Object {
 
 func (r *REST) GroupVersionKind(containingGV schema.GroupVersion) schema.GroupVersionKind {
 	return admission.SchemeGroupVersion.WithKind("AdmissionReview")
+}
+
+func (r *REST) NamespaceScoped() bool {
+	return false
 }
 
 func (r *REST) Create(ctx context.Context, obj runtime.Object, _ rest.ValidateObjectFunc, _ bool) (runtime.Object, error) {
