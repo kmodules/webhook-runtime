@@ -27,6 +27,5 @@ dist/
 **/junit.xml
 **/.env
 .vscode/
-vendor/
 coverage.txt
 apiserver.local.config/
