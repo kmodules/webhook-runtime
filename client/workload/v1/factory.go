@@ -3,7 +3,7 @@ package v1
 import (
 	"fmt"
 
-	"github.com/appscode/kubernetes-webhook-util/apis/workload/v1"
+	v1 "github.com/appscode/kubernetes-webhook-util/apis/workload/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	appsv1beta1 "k8s.io/api/apps/v1beta1"
 	appsv1beta2 "k8s.io/api/apps/v1beta2"
