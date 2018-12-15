@@ -10,7 +10,7 @@ import (
 	"github.com/appscode/kubernetes-webhook-util/runtime/serializer/versioning"
 	"github.com/appscode/kutil/meta"
 	"github.com/golang/glog"
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 	"k8s.io/api/admission/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
