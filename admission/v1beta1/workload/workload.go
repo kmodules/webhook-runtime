@@ -5,11 +5,6 @@ import (
 	"sync"
 
 	jp "github.com/appscode/jsonpatch"
-	"github.com/appscode/kubernetes-webhook-util/admission"
-	api "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
-	v1 "github.com/appscode/kubernetes-webhook-util/apis/workload/v1"
-	cs "github.com/appscode/kubernetes-webhook-util/client/workload/v1"
-	"github.com/appscode/kutil/meta"
 	"github.com/golang/glog"
 	jsoniter "github.com/json-iterator/go"
 	"k8s.io/api/admission/v1beta1"
@@ -22,6 +17,11 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/rest"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
+	"kmodules.xyz/client-go/meta"
+	"kmodules.xyz/webhook-runtime/admission"
+	api "kmodules.xyz/webhook-runtime/admission/v1beta1"
+	v1 "kmodules.xyz/webhook-runtime/apis/workload/v1"
+	cs "kmodules.xyz/webhook-runtime/client/workload/v1"
 )
 
 var json = jsoniter.ConfigFastest

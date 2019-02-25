@@ -3,8 +3,6 @@ package v1
 import (
 	"fmt"
 
-	v1 "github.com/appscode/kubernetes-webhook-util/apis/workload/v1"
-	"github.com/appscode/kutil"
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/golang/glog"
 	jsoniter "github.com/json-iterator/go"
@@ -21,8 +19,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
+	kutil "kmodules.xyz/client-go"
 	ocapps "kmodules.xyz/openshift/apis/apps/v1"
 	occ "kmodules.xyz/openshift/client/clientset/versioned"
+	v1 "kmodules.xyz/webhook-runtime/apis/workload/v1"
 )
 
 var json = jsoniter.ConfigFastest
