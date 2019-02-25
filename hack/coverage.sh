@@ -2,7 +2,7 @@
 set -eou pipefail
 
 GOPATH=$(go env GOPATH)
-REPO_ROOT="$GOPATH/src/github.com/appscode/kubernetes-webhook-util"
+REPO_ROOT="$GOPATH/src/kmodules.xyz/webhook-runtime"
 
 pushd $REPO_ROOT
 

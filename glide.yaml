@@ -1,29 +1,29 @@
-package: github.com/appscode/kubernetes-webhook-util
+package: kmodules.xyz/webhook-runtime
 import:
 - package: github.com/appscode/jsonpatch
   version: master
-- package: github.com/appscode/kutil
-  version: release-9.0
 - package: github.com/evanphx/json-patch
   version: v4.1.0
 - package: github.com/golang/glog
 - package: github.com/json-iterator/go
   version: 1.1.5
 - package: kmodules.xyz/openshift
-  repo: https://github.com/kmodules/openshift.git
-  vcs: git
-  version: release-9.0
+  version: release-10.0
 - package: k8s.io/api
-  version: kubernetes-1.12.0
+  version: kubernetes-1.13.0
+- package: k8s.io/apiextensions-apiserver
+  version: kubernetes-1.13.0
 - package: k8s.io/apimachinery
-  repo: https://github.com/pharmer/apimachinery.git
+  repo: https://github.com/kmodules/apimachinery.git
   vcs: git
-  version: ac-1.12.0
+  version: ac-1.13.0
 - package: k8s.io/apiserver
-  repo: https://github.com/pharmer/apiserver.git
+  repo: https://github.com/kmodules/apiserver.git
   vcs: git
-  version: ac-1.12.0
+  version: ac-1.13.0
 - package: k8s.io/client-go
-  version: v9.0.0
+  version: v10.0.0
 - package: k8s.io/kubernetes
-  version: v1.12.0
+  version: v1.13.0
+- package: kmodules.xyz/client-go
+  version: release-10.0

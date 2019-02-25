@@ -1,5 +1,5 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/appscode/kubernetes-webhook-util)](https://goreportcard.com/report/github.com/appscode/kubernetes-webhook-util)
-[![GoDoc](https://godoc.org/github.com/appscode/kubernetes-webhook-util?status.svg "GoDoc")](https://godoc.org/github.com/appscode/kubernetes-webhook-util)
+[![Go Report Card](https://goreportcard.com/badge/kmodules.xyz/webhook-runtime)](https://goreportcard.com/report/kmodules.xyz/webhook-runtime)
+[![GoDoc](https://godoc.org/kmodules.xyz/webhook-runtime?status.svg "GoDoc")](https://godoc.org/kmodules.xyz/webhook-runtime)
 [![Build Status](https://travis-ci.org/appscode/kubernetes-webhook-util.svg?branch=master)](https://travis-ci.org/appscode/kubernetes-webhook-util)
 [![codecov](https://codecov.io/gh/appscode/kubernetes-webhook-util/branch/master/graph/badge.svg)](https://codecov.io/gh/appscode/kubernetes-webhook-util)
 [![Slack](https://slack.appscode.com/badge.svg)](https://slack.appscode.com)
