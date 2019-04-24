@@ -3,6 +3,8 @@ go:
  - 1.x
  - tip
 
+go_import_path: kmodules.xyz/webhook-runtime
+
 install: true
 
 script:
