@@ -185,6 +185,12 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			if len(w.Spec.Selector.MatchExpressions) > 0 {
+				return fmt.Errorf("cannot convert MatchExpressions to map[string]string type selector")
+			}
+			t.Spec.Selector = w.Spec.Selector.MatchLabels
+		}
 		// Deployment
 	case *extensions.Deployment:
 		t.ObjectMeta = w.ObjectMeta
@@ -192,11 +198,17 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 	case *appsv1beta1.Deployment:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
+		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
 		}
 	case *appsv1beta2.Deployment:
 		t.ObjectMeta = w.ObjectMeta
@@ -204,22 +216,37 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 	case *appsv1.Deployment:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 		// DaemonSet
 	case *extensions.DaemonSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 	case *appsv1beta2.DaemonSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 	case *appsv1.DaemonSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 		// ReplicaSet
 	case *extensions.ReplicaSet:
 		t.ObjectMeta = w.ObjectMeta
@@ -227,17 +254,26 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 	case *appsv1beta2.ReplicaSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 	case *appsv1.ReplicaSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
+		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
 		}
 		// StatefulSet
 	case *appsv1beta1.StatefulSet:
@@ -246,11 +282,17 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 	case *appsv1beta2.StatefulSet:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
+		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
 		}
 	case *appsv1.StatefulSet:
 		t.ObjectMeta = w.ObjectMeta
@@ -258,20 +300,35 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = w.Spec.Replicas
 		}
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 		// Job
 	case *batchv1.Job:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = w.Spec.Template
+		if w.Spec.Selector != nil {
+			t.Spec.Selector = w.Spec.Selector
+		}
 		// CronJob
 	case *batchv1beta1.CronJob:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.JobTemplate.Spec.Template = w.Spec.Template
+		if w.Spec.Selector != nil {
+			t.Spec.JobTemplate.Spec.Selector = w.Spec.Selector
+		}
 		// DeploymentConfig
 	case *ocapps.DeploymentConfig:
 		t.ObjectMeta = w.ObjectMeta
 		t.Spec.Template = &w.Spec.Template
 		if w.Spec.Replicas != nil {
 			t.Spec.Replicas = *w.Spec.Replicas
+		}
+		if w.Spec.Selector != nil {
+			if len(w.Spec.Selector.MatchExpressions) > 0 {
+				return fmt.Errorf("cannot convert MatchExpressions to map[string]string type selector")
+			}
+			t.Spec.Selector = w.Spec.Selector.MatchLabels
 		}
 	default:
 		return fmt.Errorf("the object is not a pod or does not have a pod template")
