@@ -57,23 +57,23 @@ func NewObject(kindOrResource string, name, ns string) (runtime.Object, error) {
 			ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns},
 		}, nil
 	case v1.KindDeployment, v1.ResourceDeployments, v1.ResourceDeployment:
-		return &appsv1beta1.Deployment{
-			TypeMeta:   metav1.TypeMeta{APIVersion: appsv1beta1.SchemeGroupVersion.String(), Kind: v1.KindDeployment},
+		return &appsv1.Deployment{
+			TypeMeta:   metav1.TypeMeta{APIVersion: appsv1.SchemeGroupVersion.String(), Kind: v1.KindDeployment},
 			ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns},
 		}, nil
 	case v1.KindDaemonSet, v1.ResourceDaemonSets, v1.ResourceDaemonSet:
-		return &extensions.DaemonSet{
-			TypeMeta:   metav1.TypeMeta{APIVersion: extensions.SchemeGroupVersion.String(), Kind: v1.KindDaemonSet},
+		return &appsv1.DaemonSet{
+			TypeMeta:   metav1.TypeMeta{APIVersion: appsv1.SchemeGroupVersion.String(), Kind: v1.KindDaemonSet},
 			ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns},
 		}, nil
 	case v1.KindReplicaSet, v1.ResourceReplicaSets, v1.ResourceReplicaSet:
-		return &extensions.ReplicaSet{
-			TypeMeta:   metav1.TypeMeta{APIVersion: extensions.SchemeGroupVersion.String(), Kind: v1.KindReplicaSet},
+		return &appsv1.ReplicaSet{
+			TypeMeta:   metav1.TypeMeta{APIVersion: appsv1.SchemeGroupVersion.String(), Kind: v1.KindReplicaSet},
 			ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns},
 		}, nil
 	case v1.KindStatefulSet, v1.ResourceStatefulSets, v1.ResourceStatefulSet:
-		return &appsv1beta1.StatefulSet{
-			TypeMeta:   metav1.TypeMeta{APIVersion: appsv1beta1.SchemeGroupVersion.String(), Kind: v1.KindStatefulSet},
+		return &appsv1.StatefulSet{
+			TypeMeta:   metav1.TypeMeta{APIVersion: appsv1.SchemeGroupVersion.String(), Kind: v1.KindStatefulSet},
 			ObjectMeta: metav1.ObjectMeta{Name: name, Namespace: ns},
 		}, nil
 	case v1.KindJob, v1.ResourceJobs, v1.ResourceJob:
