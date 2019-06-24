@@ -2,7 +2,6 @@ package v1
 
 import (
 	"fmt"
-
 	appsv1 "k8s.io/api/apps/v1"
 	appsv1beta1 "k8s.io/api/apps/v1beta1"
 	appsv1beta2 "k8s.io/api/apps/v1beta2"
@@ -187,7 +186,7 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		}
 		if w.Spec.Selector != nil {
 			if len(w.Spec.Selector.MatchExpressions) > 0 {
-				return fmt.Errorf("cannot convert MatchExpressions to map[string]string type selector")
+				return fmt.Errorf("selector.matchExpressions is not supported for ReplicationController %s/%s", w.Namespace, w.Name)
 			}
 			t.Spec.Selector = w.Spec.Selector.MatchLabels
 		}
@@ -326,7 +325,7 @@ func ApplyWorkload(obj runtime.Object, w *v1.Workload) error {
 		}
 		if w.Spec.Selector != nil {
 			if len(w.Spec.Selector.MatchExpressions) > 0 {
-				return fmt.Errorf("cannot convert MatchExpressions to map[string]string type selector")
+				return fmt.Errorf("selector.matchExpressions is not supported for DeploymentConfig %s/%s", w.Namespace, w.Name)
 			}
 			t.Spec.Selector = w.Spec.Selector.MatchLabels
 		}
