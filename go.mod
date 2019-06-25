@@ -4,9 +4,8 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.38.0 // indirect
-	github.com/appscode/jsonpatch v0.0.0-20190108182946-7c0e3b262f30
 	github.com/docker/distribution v2.7.1+incompatible // indirect
-	github.com/evanphx/json-patch v4.2.0+incompatible
+	github.com/evanphx/json-patch v4.5.0+incompatible
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/json-iterator/go v1.1.6
@@ -14,6 +13,7 @@ require (
 	github.com/prometheus/common v0.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20190506204251-e1dfcc566284 // indirect
 	golang.org/x/net v0.0.0-20190503192946-f4e77d36d62c // indirect
+	gomodules.xyz/jsonpatch/v2 v2.0.0
 	k8s.io/api v0.0.0-20190503110853-61630f889b3c
 	k8s.io/apimachinery v0.0.0-20190508063446-a3da69d3723c
 	k8s.io/apiserver v0.0.0-20190508023946-fd6533a7aee7
@@ -21,7 +21,7 @@ require (
 	k8s.io/kube-openapi v0.0.0-20190502190224-411b2483e503 // indirect
 	k8s.io/kubernetes v1.14.1
 	k8s.io/utils v0.0.0-20190506122338-8fab8cb257d5 // indirect
-	kmodules.xyz/client-go v0.0.0-20190508091620-0d215c04352f
+	kmodules.xyz/client-go v0.0.0-20190625124152-dfad3f9bffea
 	kmodules.xyz/openshift v0.0.0-20190225002038-ca9787d09794
 )
 
