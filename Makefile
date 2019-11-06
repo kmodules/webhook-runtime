@@ -19,11 +19,8 @@ GO_PKG   := kmodules.xyz
 REPO     := $(notdir $(shell pwd))
 BIN      := webhook-runtime
 
-# Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
-CRD_OPTIONS          ?= "crd:trivialVersions=true"
 # https://github.com/appscodelabs/gengo-builder
 CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.14
-API_GROUPS           ?= kubedb:v1alpha1 catalog:v1alpha1 config:v1alpha1
 
 # This version-strategy uses git tags to set the version string
 git_branch       := $(shell git rev-parse --abbrev-ref HEAD)
