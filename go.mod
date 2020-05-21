@@ -11,6 +11,7 @@ require (
 	k8s.io/apimachinery v0.18.3
 	k8s.io/apiserver v0.18.3
 	k8s.io/client-go v0.18.3
+	k8s.io/klog v1.0.0
 	k8s.io/kubernetes v1.18.3
 	kmodules.xyz/client-go v0.0.0-20200521013016-a4d5e506e1db
 	kmodules.xyz/openshift v0.0.0-20200521035756-8f071811ed8d
