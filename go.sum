@@ -777,10 +777,11 @@ k8s.io/sample-apiserver v0.18.3/go.mod h1:Un04reJ2OCi73A/ZKrZkMtumJznUl98AM18pfu
 k8s.io/system-validators v1.0.4/go.mod h1:HgSgTg4NAGNoYYjKsUyk52gdNi2PVDswQ9Iyn66R7NI=
 k8s.io/utils v0.0.0-20200324210504-a9aa75ae1b89 h1:d4vVOjXm687F1iLSP2q3lyPPuyvTUt3aVoBpi2DqRsU=
 k8s.io/utils v0.0.0-20200324210504-a9aa75ae1b89/go.mod h1:sZAwmy6armz5eXlNoLmJcl4F1QuKu7sr+mFQ0byX7Ew=
-kmodules.xyz/client-go v0.0.0-20200521013016-a4d5e506e1db h1:ZlwARfnU5hv29rVgiX7JYgASuIFx9MXKGa2UxoYNN4I=
-kmodules.xyz/client-go v0.0.0-20200521013016-a4d5e506e1db/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
-kmodules.xyz/openshift v0.0.0-20200521035756-8f071811ed8d h1:4GS3/uQu3MzGyBVcU/nPGCzstPhXn91GOFaTL429QDY=
-kmodules.xyz/openshift v0.0.0-20200521035756-8f071811ed8d/go.mod h1:NGdFff3qbhamyoO0jTNtOIa89RTAQQYxK9FnBIi66fM=
+kmodules.xyz/client-go v0.0.0-20200521065424-173e32c78a20/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
+kmodules.xyz/client-go v0.0.0-20200522120609-c6430d66212f h1:8UjB4zeASqedORHWpGoeDhRT7C564GZuY2rPsMmqvko=
+kmodules.xyz/client-go v0.0.0-20200522120609-c6430d66212f/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
+kmodules.xyz/openshift v0.0.0-20200522123204-ce4abf5433c8 h1:+sZr3YWZwDMpaNeCzOq0APWYf9tOyqaMxe00NIBhjhc=
+kmodules.xyz/openshift v0.0.0-20200522123204-ce4abf5433c8/go.mod h1:nVhGcoB3Bi7Ots5+g972Ap/vtyIrrtoK3Z3aulNux7w=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=
 modernc.org/golex v1.0.0/go.mod h1:b/QX9oBD/LhixY6NDh+IdGv17hgB+51fET1i2kPSmvk=
 modernc.org/mathutil v1.0.0/go.mod h1:wU0vUrJsVWBZ4P6e7xtFJEhFSNsfRLJ8H458uRjg03k=
