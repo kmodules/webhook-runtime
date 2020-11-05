@@ -11,10 +11,6 @@ github.com/Azure/go-autorest/autorest/date
 github.com/Azure/go-autorest/logger
 # github.com/Azure/go-autorest/tracing v0.5.0 => github.com/Azure/go-autorest/tracing v0.5.0
 github.com/Azure/go-autorest/tracing
-# github.com/appscode/go v0.0.0-20200323182826-54e98e09185a
-github.com/appscode/go/encoding/json/types
-github.com/appscode/go/sets
-github.com/appscode/go/types
 # github.com/beorn7/perks v1.0.1
 github.com/beorn7/perks/quantile
 # github.com/blang/semver v3.5.0+incompatible
@@ -37,7 +33,7 @@ github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/sortkeys
 # github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 github.com/golang/glog
-# github.com/golang/protobuf v1.4.2 => github.com/golang/protobuf v1.3.2
+# github.com/golang/protobuf v1.4.3 => github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/jsonpb
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/ptypes
@@ -45,7 +41,7 @@ github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/struct
 github.com/golang/protobuf/ptypes/timestamp
-# github.com/google/go-cmp v0.3.1
+# github.com/google/go-cmp v0.4.0
 github.com/google/go-cmp/cmp
 github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
@@ -53,7 +49,7 @@ github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
 # github.com/google/gofuzz v1.1.0
 github.com/google/gofuzz
-# github.com/google/uuid v1.1.1
+# github.com/google/uuid v1.1.2
 github.com/google/uuid
 # github.com/googleapis/gnostic v0.1.0 => github.com/googleapis/gnostic v0.3.1
 github.com/googleapis/gnostic/OpenAPIv2
@@ -79,7 +75,7 @@ github.com/modern-go/concurrent
 github.com/modern-go/reflect2
 # github.com/opencontainers/go-digest v1.0.0-rc1
 github.com/opencontainers/go-digest
-# github.com/pkg/errors v0.8.1
+# github.com/pkg/errors v0.9.1
 github.com/pkg/errors
 # github.com/prometheus/client_golang v1.0.0 => github.com/prometheus/client_golang v1.7.1
 github.com/prometheus/client_golang/prometheus
@@ -368,11 +364,11 @@ k8s.io/kubernetes/pkg/util/parsers
 k8s.io/utils/integer
 k8s.io/utils/net
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20200922200830-63d86b6e5b63
+# kmodules.xyz/client-go v0.0.0-20201105071625-0b277310b9b8
 kmodules.xyz/client-go
 kmodules.xyz/client-go/discovery
 kmodules.xyz/client-go/meta
-# kmodules.xyz/openshift v0.0.0-20200922211657-1ece16d36c18
+# kmodules.xyz/openshift v0.0.0-20201105073146-0da509a7d39f
 kmodules.xyz/openshift/apis/apps/install
 kmodules.xyz/openshift/apis/apps/v1
 kmodules.xyz/openshift/apis/security/v1
