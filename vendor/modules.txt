@@ -441,7 +441,7 @@ k8s.io/kubernetes/pkg/util/parsers
 # k8s.io/utils v0.0.0-20201110183641-67b214c5f920 => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 k8s.io/utils/integer
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20210425191502-3a7296dae084
+# kmodules.xyz/client-go v0.0.0-20210429233600-944c5ec810d6
 kmodules.xyz/client-go
 kmodules.xyz/client-go/discovery
 kmodules.xyz/client-go/meta
