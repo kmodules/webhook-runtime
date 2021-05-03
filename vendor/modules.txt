@@ -21,7 +21,7 @@ github.com/blang/semver
 github.com/cespare/xxhash/v2
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
-# github.com/docker/distribution v2.7.1+incompatible
+# github.com/docker/distribution v2.7.1+incompatible => github.com/docker/distribution v0.0.0-20191216044856-a8371794149d
 github.com/docker/distribution/digestset
 github.com/docker/distribution/reference
 # github.com/evanphx/json-patch v4.9.0+incompatible
@@ -441,11 +441,11 @@ k8s.io/kubernetes/pkg/util/parsers
 # k8s.io/utils v0.0.0-20201110183641-67b214c5f920 => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 k8s.io/utils/integer
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20210429233600-944c5ec810d6
+# kmodules.xyz/client-go v0.0.0-20210502215034-b73197efff3f
 kmodules.xyz/client-go
 kmodules.xyz/client-go/discovery
 kmodules.xyz/client-go/meta
-# kmodules.xyz/openshift v0.0.0-20210427090503-74b639d9fc30
+# kmodules.xyz/openshift v0.0.0-20210502215728-d1a9afb41893
 kmodules.xyz/openshift/apis/apps/install
 kmodules.xyz/openshift/apis/apps/v1
 kmodules.xyz/openshift/apis/security/v1
