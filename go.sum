@@ -912,8 +912,8 @@ k8s.io/system-validators v1.4.0/go.mod h1:bPldcLgkIUK22ALflnsXk8pvkTEndYdNuaHH6g
 k8s.io/utils v0.0.0-20201110183641-67b214c5f920 h1:CbnUZsM497iRC5QMVkHwyl8s2tB3g7yaSHkYPkpgelw=
 k8s.io/utils v0.0.0-20201110183641-67b214c5f920/go.mod h1:jPW/WVKK9YHAvNhRxK0md/EJ228hCsBRufyofKtW8HA=
 kmodules.xyz/client-go v0.0.0-20210502215034-b73197efff3f/go.mod h1:lHHgEovuSVHCDl7pe0ZyY4VrVTtByfijZpKeLk5A1/M=
-kmodules.xyz/client-go v0.0.0-20210503064222-c8c59295a3a5 h1:4EyHIidgWmKsej6QLyHOhZXelzWB/FcEx/E+SQz9Tl0=
-kmodules.xyz/client-go v0.0.0-20210503064222-c8c59295a3a5/go.mod h1:Dg0/zImljlRXce1Nr/nr0xv2bOIVTFqRJr+AvFoYXJU=
+kmodules.xyz/client-go v0.0.0-20210504004915-de8d9776f2a1 h1:ZbubuUclyvFcLnM7KeJl6V2eMapvogqtV4kVe8xbGPc=
+kmodules.xyz/client-go v0.0.0-20210504004915-de8d9776f2a1/go.mod h1:ifLKR8x30D3olyDLLOX4EWofPQSWwE71unymOgZzKHw=
 kmodules.xyz/openshift v0.0.0-20210503064748-50cdbee251d7 h1:iy6eycwkEACxJnQgD397Ga9fj1aGVnK2xyftauI5QNM=
 kmodules.xyz/openshift v0.0.0-20210503064748-50cdbee251d7/go.mod h1:y6GopdtqxJJy+UNa7nNNuMfOcG2iN9yDts/q0ACqNzI=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=

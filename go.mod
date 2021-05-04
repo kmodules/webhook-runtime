@@ -4,7 +4,6 @@ go 1.12
 
 require (
 	github.com/evanphx/json-patch v4.9.0+incompatible
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/json-iterator/go v1.1.10
 	gomodules.xyz/jsonpatch/v2 v2.1.0
 	k8s.io/api v0.21.0
@@ -13,8 +12,7 @@ require (
 	k8s.io/client-go v0.21.0
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubernetes v1.21.0
-	k8s.io/utils v0.0.0-20210111153108-fddb29f9d009 // indirect
-	kmodules.xyz/client-go v0.0.0-20210503064222-c8c59295a3a5
+	kmodules.xyz/client-go v0.0.0-20210504004915-de8d9776f2a1
 	kmodules.xyz/openshift v0.0.0-20210503064748-50cdbee251d7
 )
 

@@ -35,8 +35,6 @@ github.com/go-logr/logr
 # github.com/gogo/protobuf v1.3.2 => github.com/gogo/protobuf v1.3.2
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/sortkeys
-# github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-github.com/golang/glog
 # github.com/golang/protobuf v1.4.3 => github.com/golang/protobuf v1.4.3
 github.com/golang/protobuf/jsonpb
 github.com/golang/protobuf/proto
@@ -441,7 +439,7 @@ k8s.io/kubernetes/pkg/util/parsers
 # k8s.io/utils v0.0.0-20210111153108-fddb29f9d009 => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 k8s.io/utils/integer
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20210503064222-c8c59295a3a5
+# kmodules.xyz/client-go v0.0.0-20210504004915-de8d9776f2a1
 kmodules.xyz/client-go
 kmodules.xyz/client-go/discovery
 kmodules.xyz/client-go/meta
