@@ -12,8 +12,8 @@ require (
 	k8s.io/client-go v0.21.0
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubernetes v1.21.0
-	kmodules.xyz/client-go v0.0.0-20210504004915-de8d9776f2a1
-	kmodules.xyz/openshift v0.0.0-20210503064748-50cdbee251d7
+	kmodules.xyz/client-go v0.0.0-20210504024435-1eb80721e9b8
+	kmodules.xyz/openshift v0.0.0-20210504013521-0521443bd650
 )
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
