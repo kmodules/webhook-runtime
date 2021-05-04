@@ -4,14 +4,18 @@ go 1.12
 
 require (
 	github.com/evanphx/json-patch v4.9.0+incompatible
+	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/json-iterator/go v1.1.10
+	github.com/onsi/gomega v1.8.1 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.1.0
+	gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209 // indirect
 	k8s.io/api v0.21.0
 	k8s.io/apimachinery v0.21.0
 	k8s.io/apiserver v0.21.0
 	k8s.io/client-go v0.21.0
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubernetes v1.21.0
+	k8s.io/utils v0.0.0-20210111153108-fddb29f9d009 // indirect
 	kmodules.xyz/client-go v0.0.0-20210504024435-1eb80721e9b8
 	kmodules.xyz/openshift v0.0.0-20210504040454-a3ddfc579bb7
 )
