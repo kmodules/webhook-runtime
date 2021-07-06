@@ -20,7 +20,10 @@ import (
 	"context"
 
 	admission "k8s.io/api/admission/v1beta1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/apis/meta/internalversion"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/registry/rest"
@@ -28,13 +31,15 @@ import (
 
 // Adapted from https://github.com/openshift/generic-admission-server/blob/master/pkg/registry/admissionreview/admission_review.go
 
-type AdmissionHookFunc func(admissionSpec *admission.AdmissionRequest) *admission.AdmissionResponse
+type AdmissionHookFunc func(req *admission.AdmissionRequest) *admission.AdmissionResponse
 
 type REST struct {
 	hookFn AdmissionHookFunc
 }
 
 var _ rest.Creater = &REST{}
+var _ rest.Getter = &REST{}
+var _ rest.Lister = &REST{}
 var _ rest.Scoper = &REST{}
 var _ rest.GroupVersionKindProvider = &REST{}
 
@@ -60,4 +65,28 @@ func (r *REST) Create(ctx context.Context, obj runtime.Object, _ rest.ValidateOb
 	admissionReview := obj.(*admission.AdmissionReview)
 	admissionReview.Response = r.hookFn(admissionReview.Request)
 	return admissionReview, nil
+}
+
+var gr = admission.SchemeGroupVersion.WithResource("admissionreviews").GroupResource()
+var emptyList = func() runtime.Object {
+	var list unstructured.UnstructuredList
+	list.SetAPIVersion(admission.SchemeGroupVersion.String())
+	list.SetKind("AdmissionReview")
+	return &list
+}()
+
+func (r *REST) NewList() runtime.Object {
+	return emptyList
+}
+
+func (r *REST) List(ctx context.Context, options *internalversion.ListOptions) (runtime.Object, error) {
+	return emptyList, nil
+}
+
+func (r *REST) ConvertToTable(ctx context.Context, object runtime.Object, tableOptions runtime.Object) (*metav1.Table, error) {
+	return nil, apierrors.NewMethodNotSupported(gr, "ConvertToTable")
+}
+
+func (r *REST) Get(ctx context.Context, name string, options *metav1.GetOptions) (runtime.Object, error) {
+	return nil, apierrors.NewNotFound(gr, name)
 }
