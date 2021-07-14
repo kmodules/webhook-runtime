@@ -14,25 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package workload
+package generic
 
 import (
 	"bytes"
 	"sync"
 
 	"kmodules.xyz/client-go/meta"
-	"kmodules.xyz/webhook-runtime/admission"
-	api "kmodules.xyz/webhook-runtime/admission/v1beta1"
-	v1 "kmodules.xyz/webhook-runtime/apis/workload/v1"
-	cs "kmodules.xyz/webhook-runtime/client/workload/v1"
+	lib "kmodules.xyz/webhook-runtime/admission"
+	api "kmodules.xyz/webhook-runtime/admission/v1"
+	"kmodules.xyz/webhook-runtime/runtime/serializer/versioning"
 
 	jsoniter "github.com/json-iterator/go"
 	jp "gomodules.xyz/jsonpatch/v2"
-	"k8s.io/api/admission/v1beta1"
-	appsv1 "k8s.io/api/apps/v1"
-	batchv1 "k8s.io/api/batch/v1"
-	core "k8s.io/api/core/v1"
-	extensions "k8s.io/api/extensions/v1beta1"
+	admission "k8s.io/api/admission/v1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -43,44 +38,44 @@ import (
 
 var json = jsoniter.ConfigFastest
 
-// WorkloadWebhook avoids the bidirectional conversion needed for GenericWebhooks. Only supports workload types.
-type WorkloadWebhook struct {
+type GenericWebhook struct {
 	plural   schema.GroupVersionResource
 	singular string
-	kind     string
 
 	srcGroups sets.String
+	target    schema.GroupVersionKind
 	factory   api.GetterFactory
 	get       api.GetFunc
-	handler   admission.ResourceHandler
+	handler   lib.ResourceHandler
 
 	initialized bool
 	lock        sync.RWMutex
 }
 
-var _ api.AdmissionHook = &WorkloadWebhook{}
+var _ api.AdmissionHook = &GenericWebhook{}
 
-func NewWorkloadWebhook(
+func NewGenericWebhook(
 	plural schema.GroupVersionResource,
 	singular string,
-	kind string,
+	srcGroups []string,
+	target schema.GroupVersionKind,
 	factory api.GetterFactory,
-	handler admission.ResourceHandler) *WorkloadWebhook {
-	return &WorkloadWebhook{
+	handler lib.ResourceHandler) *GenericWebhook {
+	return &GenericWebhook{
 		plural:    plural,
 		singular:  singular,
-		kind:      kind,
-		srcGroups: sets.NewString(core.GroupName, appsv1.GroupName, extensions.GroupName, batchv1.GroupName),
+		srcGroups: sets.NewString(srcGroups...),
+		target:    target,
 		factory:   factory,
 		handler:   handler,
 	}
 }
 
-func (h *WorkloadWebhook) Resource() (schema.GroupVersionResource, string) {
+func (h *GenericWebhook) Resource() (schema.GroupVersionResource, string) {
 	return h.plural, h.singular
 }
 
-func (h *WorkloadWebhook) Initialize(config *rest.Config, stopCh <-chan struct{}) error {
+func (h *GenericWebhook) Initialize(config *rest.Config, stopCh <-chan struct{}) error {
 	h.lock.Lock()
 	defer h.lock.Unlock()
 
@@ -93,14 +88,14 @@ func (h *WorkloadWebhook) Initialize(config *rest.Config, stopCh <-chan struct{}
 	return err
 }
 
-func (h *WorkloadWebhook) Admit(req *v1beta1.AdmissionRequest) *v1beta1.AdmissionResponse {
-	status := &v1beta1.AdmissionResponse{}
+func (h *GenericWebhook) Admit(req *admission.AdmissionRequest) *admission.AdmissionResponse {
+	status := &admission.AdmissionResponse{}
 
 	if h.handler == nil ||
-		(req.Operation != v1beta1.Create && req.Operation != v1beta1.Update && req.Operation != v1beta1.Delete) ||
+		(req.Operation != admission.Create && req.Operation != admission.Update && req.Operation != admission.Delete) ||
 		len(req.SubResource) != 0 ||
 		!h.srcGroups.Has(req.Kind.Group) ||
-		req.Kind.Kind != h.kind {
+		req.Kind.Kind != h.target.Kind {
 		status.Allowed = true
 		return status
 	}
@@ -111,11 +106,18 @@ func (h *WorkloadWebhook) Admit(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 		return api.StatusUninitialized()
 	}
 
-	codec := meta.JSONSerializer
+	codec := versioning.NewDefaultingCodecForScheme(
+		meta.JSONSerializer,
+		meta.JSONSerializer,
+		legacyscheme.Scheme,
+		legacyscheme.Scheme,
+		schema.GroupVersion{Group: req.Kind.Group, Version: req.Kind.Version},
+		h.target.GroupVersion(),
+	)
 	gvk := schema.GroupVersionKind{Group: req.Kind.Group, Version: req.Kind.Version, Kind: req.Kind.Kind}
 
 	switch req.Operation {
-	case v1beta1.Delete:
+	case admission.Delete:
 		if h.get == nil {
 			break
 		}
@@ -129,34 +131,18 @@ func (h *WorkloadWebhook) Admit(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 				return api.StatusBadRequest(err)
 			}
 		}
-	case v1beta1.Create:
-		obj, kind, err := codec.Decode(req.Object.Raw, &gvk, nil)
-		if err != nil {
-			return api.StatusBadRequest(err)
-		}
-		legacyscheme.Scheme.Default(obj)
-		obj.GetObjectKind().SetGroupVersionKind(*kind)
-		w, err := cs.ConvertToWorkload(obj)
+	case admission.Create:
+		obj, _, err := codec.Decode(req.Object.Raw, &gvk, nil)
 		if err != nil {
 			return api.StatusBadRequest(err)
 		}
 
-		mod, err := h.handler.OnCreate(w)
+		mod, err := h.handler.OnCreate(obj)
 		if err != nil {
 			return api.StatusForbidden(err)
 		} else if mod != nil {
-			if w := mod.(*v1.Workload); w.Object == nil {
-				err = cs.ApplyWorkload(obj, w)
-				if err != nil {
-					return api.StatusForbidden(err)
-				}
-			} else {
-				obj = w.Object
-			}
-			legacyscheme.Scheme.Default(obj)
-
 			var buf bytes.Buffer
-			err = codec.Encode(obj, &buf)
+			err = codec.Encode(mod, &buf)
 			if err != nil {
 				return api.StatusBadRequest(err)
 			}
@@ -172,48 +158,25 @@ func (h *WorkloadWebhook) Admit(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 				klog.V(8).Infoln("patch:", string(patch))
 			}
 			status.Patch = patch
-			patchType := v1beta1.PatchTypeJSONPatch
+			patchType := admission.PatchTypeJSONPatch
 			status.PatchType = &patchType
 		}
-	case v1beta1.Update:
-		obj, kind, err := codec.Decode(req.Object.Raw, &gvk, nil)
+	case admission.Update:
+		obj, _, err := codec.Decode(req.Object.Raw, &gvk, nil)
 		if err != nil {
 			return api.StatusBadRequest(err)
 		}
-		legacyscheme.Scheme.Default(obj)
-		obj.GetObjectKind().SetGroupVersionKind(*kind)
-		w, err := cs.ConvertToWorkload(obj)
-		if err != nil {
-			return api.StatusBadRequest(err)
-		}
-
-		oldObj, kind, err := codec.Decode(req.OldObject.Raw, &gvk, nil)
-		if err != nil {
-			return api.StatusBadRequest(err)
-		}
-		oldObj.GetObjectKind().SetGroupVersionKind(*kind)
-		legacyscheme.Scheme.Default(oldObj)
-		ow, err := cs.ConvertToWorkload(oldObj)
+		oldObj, _, err := codec.Decode(req.OldObject.Raw, &gvk, nil)
 		if err != nil {
 			return api.StatusBadRequest(err)
 		}
 
-		mod, err := h.handler.OnUpdate(ow, w)
+		mod, err := h.handler.OnUpdate(oldObj, obj)
 		if err != nil {
 			return api.StatusForbidden(err)
 		} else if mod != nil {
-			if w := mod.(*v1.Workload); w.Object == nil {
-				err = cs.ApplyWorkload(obj, w)
-				if err != nil {
-					return api.StatusForbidden(err)
-				}
-			} else {
-				obj = w.Object
-			}
-			legacyscheme.Scheme.Default(obj)
-
 			var buf bytes.Buffer
-			err = codec.Encode(obj, &buf)
+			err = codec.Encode(mod, &buf)
 			if err != nil {
 				return api.StatusBadRequest(err)
 			}
@@ -229,7 +192,7 @@ func (h *WorkloadWebhook) Admit(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 				klog.V(8).Infoln("patch:", string(patch))
 			}
 			status.Patch = patch
-			patchType := v1beta1.PatchTypeJSONPatch
+			patchType := admission.PatchTypeJSONPatch
 			status.PatchType = &patchType
 		}
 	}
