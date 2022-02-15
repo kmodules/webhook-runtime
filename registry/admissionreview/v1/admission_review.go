@@ -59,5 +59,6 @@ func (r *REST) NamespaceScoped() bool {
 func (r *REST) Create(ctx context.Context, obj runtime.Object, _ rest.ValidateObjectFunc, _ *metav1.CreateOptions) (runtime.Object, error) {
 	admissionReview := obj.(*admission.AdmissionReview)
 	admissionReview.Response = r.hookFn(admissionReview.Request)
+	admissionReview.Response.UID = admissionReview.Request.UID
 	return admissionReview, nil
 }
