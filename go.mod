@@ -12,7 +12,7 @@ require (
 	k8s.io/client-go v0.21.1
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubernetes v1.21.1
-	kmodules.xyz/client-go v0.0.0-20220215012708-9963581d69a7
+	kmodules.xyz/client-go v0.0.0-20211013093146-1fbfd52e78c9
 	kmodules.xyz/openshift v0.0.0-20210618001443-f2507caa512f
 	sigs.k8s.io/controller-runtime v0.9.0
 )
