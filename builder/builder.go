@@ -32,13 +32,14 @@ var log = logf.Log.WithName("webhook-runtime")
 // WebhookBuilder builds a Webhook.
 type WebhookBuilder struct {
 	apiType runtime.Object
+	gr      schema.GroupResource
 	rid     *kmapi.ResourceID
-	mgr     *Manager
+	scheme  *runtime.Scheme
 }
 
 // WebhookManagedBy allows inform its Scheme and RESTMapper.
-func WebhookManagedBy(m *Manager) *WebhookBuilder {
-	return &WebhookBuilder{mgr: m}
+func WebhookManagedBy(s *runtime.Scheme) *WebhookBuilder {
+	return &WebhookBuilder{scheme: s}
 }
 
 // TODO(droot): update the GoDoc for conversion.
@@ -46,27 +47,27 @@ func WebhookManagedBy(m *Manager) *WebhookBuilder {
 // For takes a runtime.Object which should be a CR.
 // If the given object implements the admission.Defaulter interface, a MutatingWebhook will be wired for this type.
 // If the given object implements the admission.Validator interface, a ValidatingWebhook will be wired for this type.
-func (blder *WebhookBuilder) For(apiType runtime.Object) *WebhookBuilder {
+func (blder *WebhookBuilder) For(apiType runtime.Object, gr schema.GroupResource) *WebhookBuilder {
 	blder.apiType = apiType
+	blder.gr = gr
 	return blder
 }
 
 // Complete builds the webhook.
 func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHook, error) {
 	// Create webhook(s) for each type
-	gvk, err := apiutil.GVKForObject(blder.apiType, blder.mgr.Scheme)
+	gvk, err := apiutil.GVKForObject(blder.apiType, blder.scheme)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	mapping, err := blder.mgr.Mapper.RESTMapping(schema.GroupKind{
-		Group: gvk.Group,
-		Kind:  gvk.Kind,
-	}, gvk.Version)
-	if err != nil {
-		return nil, nil, err
+	blder.rid = &kmapi.ResourceID{
+		Group:   gvk.Group,
+		Version: gvk.Version,
+		Name:    blder.gr.Resource,
+		Kind:    gvk.Kind,
+		Scope:   "",
 	}
-	blder.rid = kmapi.NewResourceID(mapping)
 
 	mutator, err := blder.registerDefaultingWebhook()
 	if err != nil {
@@ -88,7 +89,7 @@ func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, e
 	}
 
 	mwh := admission.DefaultingWebhookFor(defaulter)
-	if err := mwh.InjectScheme(blder.mgr.Scheme); err != nil {
+	if err := mwh.InjectScheme(blder.scheme); err != nil {
 		return nil, err
 	}
 	if err := mwh.InjectLogger(log); err != nil {
@@ -108,7 +109,7 @@ func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, e
 	}
 
 	vwh := admission.ValidatingWebhookFor(checker)
-	if err := vwh.InjectScheme(blder.mgr.Scheme); err != nil {
+	if err := vwh.InjectScheme(blder.scheme); err != nil {
 		return nil, err
 	}
 	if err := vwh.InjectLogger(log); err != nil {
