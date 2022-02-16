@@ -48,7 +48,7 @@ func (r *REST) New() runtime.Object {
 	return &admission.AdmissionReview{}
 }
 
-func (r *REST) GroupVersionKind(containingGV schema.GroupVersion) schema.GroupVersionKind {
+func (r *REST) GroupVersionKind(_ schema.GroupVersion) schema.GroupVersionKind {
 	return admission.SchemeGroupVersion.WithKind("AdmissionReview")
 }
 
