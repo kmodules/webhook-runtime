@@ -19,7 +19,8 @@ package v1
 import (
 	"context"
 
-	admission "k8s.io/api/admission/v1"
+	admissionv1 "k8s.io/api/admission/v1"
+	admissionv1beta1 "k8s.io/api/admission/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -28,7 +29,7 @@ import (
 
 // Adapted from https://github.com/openshift/generic-admission-server/blob/master/pkg/registry/admissionreview/admission_review.go
 
-type AdmissionHookFunc func(req *admission.AdmissionRequest) *admission.AdmissionResponse
+type AdmissionHookFunc func(req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse
 
 type REST struct {
 	hookFn AdmissionHookFunc
@@ -45,11 +46,11 @@ func NewREST(hookFn AdmissionHookFunc) *REST {
 }
 
 func (r *REST) New() runtime.Object {
-	return &admission.AdmissionReview{}
+	return &admissionv1beta1.AdmissionReview{}
 }
 
-func (r *REST) GroupVersionKind(containingGV schema.GroupVersion) schema.GroupVersionKind {
-	return admission.SchemeGroupVersion.WithKind("AdmissionReview")
+func (r *REST) GroupVersionKind(_ schema.GroupVersion) schema.GroupVersionKind {
+	return admissionv1beta1.SchemeGroupVersion.WithKind("AdmissionReview")
 }
 
 func (r *REST) NamespaceScoped() bool {
@@ -57,8 +58,38 @@ func (r *REST) NamespaceScoped() bool {
 }
 
 func (r *REST) Create(ctx context.Context, obj runtime.Object, _ rest.ValidateObjectFunc, _ *metav1.CreateOptions) (runtime.Object, error) {
-	admissionReview := obj.(*admission.AdmissionReview)
-	admissionReview.Response = r.hookFn(admissionReview.Request)
-	admissionReview.Response.UID = admissionReview.Request.UID
+	admissionReview := obj.(*admissionv1beta1.AdmissionReview)
+	req := admissionReview.Request
+	resp := r.hookFn(&admissionv1.AdmissionRequest{
+		UID:                req.UID,
+		Kind:               req.Kind,
+		Resource:           req.Resource,
+		SubResource:        req.SubResource,
+		RequestKind:        req.RequestKind,
+		RequestResource:    req.RequestResource,
+		RequestSubResource: req.RequestSubResource,
+		Name:               req.Name,
+		Namespace:          req.Namespace,
+		Operation:          admissionv1.Operation(req.Operation),
+		UserInfo:           req.UserInfo,
+		Object:             req.Object,
+		OldObject:          req.OldObject,
+		DryRun:             req.DryRun,
+		Options:            req.Options,
+	})
+	respv1beta1 := &admissionv1beta1.AdmissionResponse{
+		UID:              req.UID,
+		Allowed:          resp.Allowed,
+		Result:           resp.Result,
+		Patch:            resp.Patch,
+		PatchType:        nil,
+		AuditAnnotations: resp.AuditAnnotations,
+		Warnings:         resp.Warnings,
+	}
+	if resp.PatchType != nil {
+		pt := admissionv1beta1.PatchType(*resp.PatchType)
+		respv1beta1.PatchType = &pt
+	}
+	admissionReview.Response = respv1beta1
 	return admissionReview, nil
 }
