@@ -17,7 +17,6 @@ limitations under the License.
 package builder
 
 import (
-	kmapi "kmodules.xyz/client-go/api/v1"
 	hooks "kmodules.xyz/webhook-runtime/admission/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -32,8 +31,7 @@ var log = logf.Log.WithName("webhook-runtime")
 // WebhookBuilder builds a Webhook.
 type WebhookBuilder struct {
 	apiType runtime.Object
-	gr      schema.GroupResource
-	rid     *kmapi.ResourceID
+	gvk     schema.GroupVersionKind
 	scheme  *runtime.Scheme
 }
 
@@ -47,26 +45,18 @@ func WebhookManagedBy(s *runtime.Scheme) *WebhookBuilder {
 // For takes a runtime.Object which should be a CR.
 // If the given object implements the admission.Defaulter interface, a MutatingWebhook will be wired for this type.
 // If the given object implements the admission.Validator interface, a ValidatingWebhook will be wired for this type.
-func (blder *WebhookBuilder) For(apiType runtime.Object, gr schema.GroupResource) *WebhookBuilder {
+func (blder *WebhookBuilder) For(apiType runtime.Object) *WebhookBuilder {
 	blder.apiType = apiType
-	blder.gr = gr
 	return blder
 }
 
 // Complete builds the webhook.
 func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHook, error) {
 	// Create webhook(s) for each type
-	gvk, err := apiutil.GVKForObject(blder.apiType, blder.scheme)
+	var err error
+	blder.gvk, err = apiutil.GVKForObject(blder.apiType, blder.scheme)
 	if err != nil {
 		return nil, nil, err
-	}
-
-	blder.rid = &kmapi.ResourceID{
-		Group:   gvk.Group,
-		Version: gvk.Version,
-		Name:    blder.gr.Resource,
-		Kind:    gvk.Kind,
-		Scope:   "",
 	}
 
 	mutator, err := blder.registerDefaultingWebhook()
@@ -84,7 +74,7 @@ func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHoo
 func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, error) {
 	defaulter, isDefaulter := blder.apiType.(admission.Defaulter)
 	if !isDefaulter {
-		log.Info("skip registering a mutating webhook, admission.Defaulter interface is not implemented", "GVK", blder.rid.GroupVersionKind())
+		log.Info("skip registering a mutating webhook, admission.Defaulter interface is not implemented", "GVK", blder.gvk)
 		return nil, nil
 	}
 
@@ -95,16 +85,17 @@ func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, e
 	if err := mwh.InjectLogger(log); err != nil {
 		return nil, err
 	}
-	return &mutator{
-		rid: blder.rid,
-		w:   mwh,
+	return &webhook{
+		prefix: MutatorGroupPrefix,
+		gvk:    blder.gvk,
+		w:      mwh,
 	}, nil
 }
 
 func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, error) {
 	checker, isValidator := blder.apiType.(admission.Validator)
 	if !isValidator {
-		log.Info("skip registering a validating webhook, admission.Validator interface is not implemented", "GVK", blder.rid.GroupVersionKind())
+		log.Info("skip registering a validating webhook, admission.Validator interface is not implemented", "GVK", blder.gvk)
 		return nil, nil
 	}
 
@@ -115,8 +106,9 @@ func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, e
 	if err := vwh.InjectLogger(log); err != nil {
 		return nil, err
 	}
-	return &validator{
-		rid: blder.rid,
-		w:   vwh,
+	return &webhook{
+		prefix: ValidatorGroupPrefix,
+		gvk:    blder.gvk,
+		w:      vwh,
 	}, nil
 }
