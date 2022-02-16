@@ -31,7 +31,7 @@ var log = logf.Log.WithName("webhook-runtime")
 // WebhookBuilder builds a Webhook.
 type WebhookBuilder struct {
 	apiType runtime.Object
-	gvk     schema.GroupVersionKind
+	gk      schema.GroupKind
 	scheme  *runtime.Scheme
 }
 
@@ -53,11 +53,11 @@ func (blder *WebhookBuilder) For(apiType runtime.Object) *WebhookBuilder {
 // Complete builds the webhook.
 func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHook, error) {
 	// Create webhook(s) for each type
-	var err error
-	blder.gvk, err = apiutil.GVKForObject(blder.apiType, blder.scheme)
+	gvk, err := apiutil.GVKForObject(blder.apiType, blder.scheme)
 	if err != nil {
 		return nil, nil, err
 	}
+	blder.gk = gvk.GroupKind()
 
 	mutator, err := blder.registerDefaultingWebhook()
 	if err != nil {
@@ -74,7 +74,7 @@ func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHoo
 func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, error) {
 	defaulter, isDefaulter := blder.apiType.(admission.Defaulter)
 	if !isDefaulter {
-		log.Info("skip registering a mutating webhook, admission.Defaulter interface is not implemented", "GVK", blder.gvk)
+		log.Info("skip registering a mutating webhook, admission.Defaulter interface is not implemented", "GK", blder.gk)
 		return nil, nil
 	}
 
@@ -87,7 +87,7 @@ func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, e
 	}
 	return &webhook{
 		prefix: MutatorGroupPrefix,
-		gvk:    blder.gvk,
+		gk:     blder.gk,
 		w:      mwh,
 	}, nil
 }
@@ -95,7 +95,7 @@ func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, e
 func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, error) {
 	checker, isValidator := blder.apiType.(admission.Validator)
 	if !isValidator {
-		log.Info("skip registering a validating webhook, admission.Validator interface is not implemented", "GVK", blder.gvk)
+		log.Info("skip registering a validating webhook, admission.Validator interface is not implemented", "GK", blder.gk)
 		return nil, nil
 	}
 
@@ -108,7 +108,7 @@ func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, e
 	}
 	return &webhook{
 		prefix: ValidatorGroupPrefix,
-		gvk:    blder.gvk,
+		gk:     blder.gk,
 		w:      vwh,
 	}, nil
 }

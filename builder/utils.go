@@ -33,26 +33,26 @@ const (
 	ResourceSuffixSingular = "webhook"
 )
 
-func MutatorResource(gvk schema.GroupVersionKind) (plural schema.GroupVersionResource, singular string) {
+func MutatorResource(gk schema.GroupKind) (plural schema.GroupVersionResource, singular string) {
 	return schema.GroupVersionResource{
-		Group:    string(MutatorGroupPrefix) + gvk.Group,
+		Group:    string(MutatorGroupPrefix) + gk.Group,
 		Version:  "v1alpha1",
-		Resource: strings.ToLower(gvk.Kind) + ResourceSuffixPlural,
-	}, strings.ToLower(gvk.Kind) + ResourceSuffixSingular
+		Resource: strings.ToLower(gk.Kind) + ResourceSuffixPlural,
+	}, strings.ToLower(gk.Kind) + ResourceSuffixSingular
 }
 
-func ValidatorResource(gvk schema.GroupVersionKind) (plural schema.GroupVersionResource, singular string) {
+func ValidatorResource(gv schema.GroupKind) (plural schema.GroupVersionResource, singular string) {
 	return schema.GroupVersionResource{
-		Group:    string(ValidatorGroupPrefix) + gvk.Group,
+		Group:    string(ValidatorGroupPrefix) + gv.Group,
 		Version:  "v1alpha1",
-		Resource: strings.ToLower(gvk.Kind) + ResourceSuffixPlural,
-	}, strings.ToLower(gvk.Kind) + ResourceSuffixSingular
+		Resource: strings.ToLower(gv.Kind) + ResourceSuffixPlural,
+	}, strings.ToLower(gv.Kind) + ResourceSuffixSingular
 }
 
-func resource(prefix GroupPrefix, gvk schema.GroupVersionKind) (plural schema.GroupVersionResource, singular string) {
+func resource(prefix GroupPrefix, gk schema.GroupKind) (plural schema.GroupVersionResource, singular string) {
 	return schema.GroupVersionResource{
-		Group:    string(prefix) + gvk.Group,
+		Group:    string(prefix) + gk.Group,
 		Version:  "v1alpha1",
-		Resource: strings.ToLower(gvk.Kind) + ResourceSuffixPlural,
-	}, strings.ToLower(gvk.Kind) + ResourceSuffixSingular
+		Resource: strings.ToLower(gk.Kind) + ResourceSuffixPlural,
+	}, strings.ToLower(gk.Kind) + ResourceSuffixSingular
 }

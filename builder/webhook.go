@@ -28,7 +28,7 @@ import (
 )
 
 type webhook struct {
-	gvk    schema.GroupVersionKind
+	gk     schema.GroupKind
 	prefix GroupPrefix
 	w      *admission.Webhook
 }
@@ -40,7 +40,7 @@ func (m *webhook) Initialize(_ *rest.Config, _ <-chan struct{}) error {
 }
 
 func (m *webhook) Resource() (plural schema.GroupVersionResource, singular string) {
-	return resource(m.prefix, m.gvk)
+	return resource(m.prefix, m.gk)
 }
 
 func (m *webhook) Admit(admissionSpec *v1.AdmissionRequest) *v1.AdmissionResponse {
