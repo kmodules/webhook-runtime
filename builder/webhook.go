@@ -18,9 +18,7 @@ package builder
 
 import (
 	"context"
-	"strings"
 
-	kmapi "kmodules.xyz/client-go/api/v1"
 	hooks "kmodules.xyz/webhook-runtime/admission/v1"
 
 	v1 "k8s.io/api/admission/v1"
@@ -29,26 +27,23 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-type mutator struct {
-	rid *kmapi.ResourceID
-	w   *admission.Webhook
+type webhook struct {
+	gvk    schema.GroupVersionKind
+	prefix GroupPrefix
+	w      *admission.Webhook
 }
 
-var _ hooks.AdmissionHook = &mutator{}
+var _ hooks.AdmissionHook = &webhook{}
 
-func (m *mutator) Initialize(config *rest.Config, stopCh <-chan struct{}) error {
+func (m *webhook) Initialize(_ *rest.Config, _ <-chan struct{}) error {
 	return nil
 }
 
-func (m *mutator) Resource() (plural schema.GroupVersionResource, singular string) {
-	return schema.GroupVersionResource{
-		Group:    "mutators." + m.rid.Group,
-		Version:  "v1alpha1",
-		Resource: m.rid.Name,
-	}, strings.ToLower(m.rid.Kind)
+func (m *webhook) Resource() (plural schema.GroupVersionResource, singular string) {
+	return resource(m.prefix, m.gvk)
 }
 
-func (m *mutator) Admit(admissionSpec *v1.AdmissionRequest) *v1.AdmissionResponse {
+func (m *webhook) Admit(admissionSpec *v1.AdmissionRequest) *v1.AdmissionResponse {
 	req := admission.Request{AdmissionRequest: *admissionSpec}
 	resp := m.w.Handle(context.TODO(), req)
 	return &resp.AdmissionResponse
