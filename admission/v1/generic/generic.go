@@ -60,7 +60,8 @@ func NewGenericWebhook(
 	srcGroups []string,
 	target schema.GroupVersionKind,
 	factory api.GetterFactory,
-	handler lib.ResourceHandler) *GenericWebhook {
+	handler lib.ResourceHandler,
+) *GenericWebhook {
 	return &GenericWebhook{
 		plural:    plural,
 		singular:  singular,
