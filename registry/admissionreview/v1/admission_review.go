@@ -35,9 +35,11 @@ type REST struct {
 	hookFn AdmissionHookFunc
 }
 
-var _ rest.Creater = &REST{}
-var _ rest.Scoper = &REST{}
-var _ rest.GroupVersionKindProvider = &REST{}
+var (
+	_ rest.Creater                  = &REST{}
+	_ rest.Scoper                   = &REST{}
+	_ rest.GroupVersionKindProvider = &REST{}
+)
 
 func NewREST(hookFn AdmissionHookFunc) *REST {
 	return &REST{
