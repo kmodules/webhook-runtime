@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/evanphx/json-patch v4.11.0+incompatible
-	github.com/json-iterator/go v1.1.11
+	github.com/json-iterator/go v1.1.12
 	gomodules.xyz/jsonpatch/v2 v2.2.0
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
@@ -56,7 +56,7 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.11.0 // indirect
