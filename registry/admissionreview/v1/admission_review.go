@@ -39,6 +39,7 @@ var (
 	_ rest.Creater                  = &REST{}
 	_ rest.Scoper                   = &REST{}
 	_ rest.GroupVersionKindProvider = &REST{}
+	_ rest.Storage                  = &REST{}
 )
 
 func NewREST(hookFn AdmissionHookFunc) *REST {
@@ -94,4 +95,7 @@ func (r *REST) Create(ctx context.Context, obj runtime.Object, _ rest.ValidateOb
 	}
 	admissionReview.Response = respv1beta1
 	return admissionReview, nil
+}
+
+func (r *REST) Destroy() {
 }
