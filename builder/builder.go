@@ -78,13 +78,7 @@ func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, e
 		return nil, nil
 	}
 
-	mwh := admission.DefaultingWebhookFor(defaulter)
-	if err := mwh.InjectScheme(blder.scheme); err != nil {
-		return nil, err
-	}
-	if err := mwh.InjectLogger(log); err != nil {
-		return nil, err
-	}
+	mwh := admission.DefaultingWebhookFor(blder.scheme, defaulter)
 	return &webhook{
 		prefix: MutatorGroupPrefix,
 		gk:     blder.gk,
@@ -99,13 +93,7 @@ func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, e
 		return nil, nil
 	}
 
-	vwh := admission.ValidatingWebhookFor(checker)
-	if err := vwh.InjectScheme(blder.scheme); err != nil {
-		return nil, err
-	}
-	if err := vwh.InjectLogger(log); err != nil {
-		return nil, err
-	}
+	vwh := admission.ValidatingWebhookFor(blder.scheme, checker)
 	return &webhook{
 		prefix: ValidatorGroupPrefix,
 		gk:     blder.gk,
