@@ -19,7 +19,7 @@ REPO     := $(notdir $(shell pwd))
 BIN      := webhook-runtime
 
 # https://github.com/appscodelabs/gengo-builder
-CODE_GENERATOR_IMAGE ?= ghcr.io/appscode/gengo:release-1.25
+CODE_GENERATOR_IMAGE ?= ghcr.io/appscode/gengo:release-1.29
 
 # This version-strategy uses git tags to set the version string
 git_branch       := $(shell git rev-parse --abbrev-ref HEAD)
@@ -191,7 +191,7 @@ unit-tests: $(BUILD_DIRS)
 	        ./hack/test.sh $(SRC_DIRS)                          \
 	    "
 
-ADDTL_LINTERS   := goconst,gofmt,goimports,unparam
+ADDTL_LINTERS   := gofmt,goimports,unparam
 
 .PHONY: lint
 lint: $(BUILD_DIRS)

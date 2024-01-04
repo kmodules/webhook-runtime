@@ -59,23 +59,15 @@ func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHoo
 	}
 	blder.gk = gvk.GroupKind()
 
-	mutator, err := blder.registerDefaultingWebhook()
-	if err != nil {
-		return nil, nil, err
-	}
-	validator, err := blder.registerValidatingWebhook()
-	if err != nil {
-		return nil, nil, err
-	}
-	return mutator, validator, nil
+	return blder.registerDefaultingWebhook(), blder.registerValidatingWebhook(), nil
 }
 
 // registerDefaultingWebhook registers a defaulting webhook if th.
-func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, error) {
+func (blder *WebhookBuilder) registerDefaultingWebhook() hooks.AdmissionHook {
 	defaulter, isDefaulter := blder.apiType.(admission.Defaulter)
 	if !isDefaulter {
 		log.Info("skip registering a mutating webhook, admission.Defaulter interface is not implemented", "GK", blder.gk)
-		return nil, nil
+		return nil
 	}
 
 	mwh := admission.DefaultingWebhookFor(blder.scheme, defaulter)
@@ -83,14 +75,14 @@ func (blder *WebhookBuilder) registerDefaultingWebhook() (hooks.AdmissionHook, e
 		prefix: MutatorGroupPrefix,
 		gk:     blder.gk,
 		w:      mwh,
-	}, nil
+	}
 }
 
-func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, error) {
+func (blder *WebhookBuilder) registerValidatingWebhook() hooks.AdmissionHook {
 	checker, isValidator := blder.apiType.(admission.Validator)
 	if !isValidator {
 		log.Info("skip registering a validating webhook, admission.Validator interface is not implemented", "GK", blder.gk)
-		return nil, nil
+		return nil
 	}
 
 	vwh := admission.ValidatingWebhookFor(blder.scheme, checker)
@@ -98,5 +90,5 @@ func (blder *WebhookBuilder) registerValidatingWebhook() (hooks.AdmissionHook, e
 		prefix: ValidatorGroupPrefix,
 		gk:     blder.gk,
 		w:      vwh,
-	}, nil
+	}
 }
