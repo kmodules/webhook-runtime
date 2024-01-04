@@ -562,7 +562,7 @@ k8s.io/utils/strings/slices
 # kmodules.xyz/apiversion v0.2.0
 ## explicit; go 1.14
 kmodules.xyz/apiversion
-# kmodules.xyz/client-go v0.29.1
+# kmodules.xyz/client-go v0.29.5
 ## explicit; go 1.21.5
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -579,8 +579,8 @@ kmodules.xyz/openshift/client/clientset/versioned
 kmodules.xyz/openshift/client/clientset/versioned/scheme
 kmodules.xyz/openshift/client/clientset/versioned/typed/apps/v1
 kmodules.xyz/openshift/client/clientset/versioned/typed/security/v1
-# sigs.k8s.io/controller-runtime v0.16.1-0.20231215020716-1b80b9629af8
-## explicit; go 1.21
+# sigs.k8s.io/controller-runtime v0.16.3
+## explicit; go 1.20
 sigs.k8s.io/controller-runtime/pkg/client
 sigs.k8s.io/controller-runtime/pkg/client/apiutil
 sigs.k8s.io/controller-runtime/pkg/log
