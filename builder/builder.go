@@ -22,17 +22,17 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
-	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-var log = logf.Log.WithName("webhook-runtime")
-
 // WebhookBuilder builds a Webhook.
 type WebhookBuilder struct {
-	apiType runtime.Object
-	gk      schema.GroupKind
-	scheme  *runtime.Scheme
+	apiType             runtime.Object
+	gk                  schema.GroupKind
+	scheme              *runtime.Scheme
+	customDefaulter     admission.CustomDefaulter
+	customDefaulterOpts []admission.DefaulterOption
+	customValidator     admission.CustomValidator
 }
 
 // WebhookManagedBy allows inform its Scheme and RESTMapper.
@@ -50,6 +50,20 @@ func (blder *WebhookBuilder) For(apiType runtime.Object) *WebhookBuilder {
 	return blder
 }
 
+// WithDefaulter takes an admission.CustomDefaulter interface, a MutatingWebhook with the provided opts (admission.DefaulterOption)
+// will be wired for this type.
+func (blder *WebhookBuilder) WithDefaulter(defaulter admission.CustomDefaulter, opts ...admission.DefaulterOption) *WebhookBuilder {
+	blder.customDefaulter = defaulter
+	blder.customDefaulterOpts = opts
+	return blder
+}
+
+// WithValidator takes a admission.CustomValidator interface, a ValidatingWebhook will be wired for this type.
+func (blder *WebhookBuilder) WithValidator(validator admission.CustomValidator) *WebhookBuilder {
+	blder.customValidator = validator
+	return blder
+}
+
 // Complete builds the webhook.
 func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHook, error) {
 	// Create webhook(s) for each type
@@ -64,13 +78,10 @@ func (blder *WebhookBuilder) Complete() (hooks.AdmissionHook, hooks.AdmissionHoo
 
 // registerDefaultingWebhook registers a defaulting webhook if th.
 func (blder *WebhookBuilder) registerDefaultingWebhook() hooks.AdmissionHook {
-	defaulter, isDefaulter := blder.apiType.(admission.Defaulter)
-	if !isDefaulter {
-		log.Info("skip registering a mutating webhook, admission.Defaulter interface is not implemented", "GK", blder.gk)
+	if blder.customValidator == nil {
 		return nil
 	}
-
-	mwh := admission.DefaultingWebhookFor(blder.scheme, defaulter)
+	mwh := admission.WithCustomDefaulter(blder.scheme, blder.apiType, blder.customDefaulter, blder.customDefaulterOpts...)
 	return &webhook{
 		prefix: MutatorGroupPrefix,
 		gk:     blder.gk,
@@ -79,13 +90,10 @@ func (blder *WebhookBuilder) registerDefaultingWebhook() hooks.AdmissionHook {
 }
 
 func (blder *WebhookBuilder) registerValidatingWebhook() hooks.AdmissionHook {
-	checker, isValidator := blder.apiType.(admission.Validator)
-	if !isValidator {
-		log.Info("skip registering a validating webhook, admission.Validator interface is not implemented", "GK", blder.gk)
+	if blder.customValidator == nil {
 		return nil
 	}
-
-	vwh := admission.ValidatingWebhookFor(blder.scheme, checker)
+	vwh := admission.WithCustomValidator(blder.scheme, blder.apiType, blder.customValidator)
 	return &webhook{
 		prefix: ValidatorGroupPrefix,
 		gk:     blder.gk,
